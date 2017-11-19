@@ -41,12 +41,15 @@ public:
     Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
     Mesh(const std::string& fileName);
     void Draw();
+    void InitMesh(const IndexedModel& model);
+    void DisableMesh();
     
     virtual ~Mesh();
     
+    
 private:
     
-    void InitMesh(const IndexedModel& model);
+    
     
     enum
     {
@@ -63,6 +66,8 @@ private:
     GLuint m_vertexArrayBuffer[NUM_BUFFERS];
     
     unsigned int m_drawCount;
+    
+    IndexedModel m_model;
     
 };
 

@@ -1,14 +1,12 @@
-#version 120
+#version 330 core
 
-attribute vec3 position;
-attribute vec2 texCoord;
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
 
-varying vec2 texCoord0;
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
 
-uniform mat4 transform;
-
-void main()
-{
-	gl_Position = transform * vec4(position, 1.0);
-	texCoord0 = texCoord;
+void main(){
+	gl_Position =  vec4(vertexPosition_modelspace,1);
+	UV = (vertexPosition_modelspace.xy+vec2(1,1))/2.0;
 }

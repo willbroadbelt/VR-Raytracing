@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=OpenVR Studies
+PROJECTNAME=VR Raytracing
 
 # Active Configuration
 DEFAULTCONF=Debug

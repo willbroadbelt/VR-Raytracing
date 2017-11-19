@@ -20,7 +20,6 @@ Display::Display(int width, int height, const std::string& title)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
-    //SDL_GL_SetAttribute();
     
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -46,8 +45,9 @@ Display::Display(int width, int height, const std::string& title)
     
     glEnable(GL_DEPTH_TEST);
     
+    //ISSUE: Doesn't seem to make a difference...
     glEnable(GL_CULL_FACE);
-    //glCullFace(GL_BACK);
+    glCullFace(GL_BACK);
 }
 Display::~Display()
 {

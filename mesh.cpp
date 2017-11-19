@@ -18,7 +18,8 @@
 
 Mesh::Mesh(const std::string& fileName)
 {
-    IndexedModel model = OBJModel(fileName).ToIndexedModel();
+    IndexedModel model;
+    model = OBJModel(fileName).ToIndexedModel();
     InitMesh(model);
 }
 
@@ -28,17 +29,17 @@ Mesh::Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, un
     
     for(unsigned int i = 0; i < numVertices; i++)
     {
-        model.positions.push_back(*vertices[i].getPos());
-        model.texCoords.push_back(*vertices[i].getTexCoord());
-        model.normals.push_back(*vertices[i].getNormal());
+        m_model.positions.push_back(*vertices[i].getPos());
+        m_model.texCoords.push_back(*vertices[i].getTexCoord());
+        m_model.normals.push_back(*vertices[i].getNormal());
     }  
     
     for(unsigned int i = 0; i < numIndices; i++)
     {
-        model.indices.push_back(indices[i]);
+        m_model.indices.push_back(indices[i]);
     }
     
-    InitMesh(model);
+    InitMesh(m_model);
     
     
     
@@ -51,12 +52,26 @@ Mesh::~Mesh()
 
 void Mesh::Draw()
 {
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffer[POSITION_VB]);    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffer[TEXCOORD_VB]);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffer[NORMAL_VB]);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexArrayBuffer[INDEX_VB]);
+
+    
     glBindVertexArray(m_vertexArrayObject);
     
     glDrawElements(GL_TRIANGLES, m_drawCount, GL_UNSIGNED_INT, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, m_drawCount);//GL_Shape, start in array, end in array
     
-    glBindVertexArray(0);
+    this->DisableMesh();
 }
 
 void Mesh::InitMesh(const IndexedModel& model)
@@ -89,4 +104,13 @@ void Mesh::InitMesh(const IndexedModel& model)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, model.indices.size() * sizeof(model.indices[0]), &model.indices[0], GL_STATIC_DRAW);
     
     glBindVertexArray(0);
+
+}
+
+void Mesh::DisableMesh()
+{
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    
 }

@@ -25,6 +25,8 @@ Shader::Shader(const std::string& fileName)
     glBindAttribLocation(m_program, 1, "texCoord");
     glBindAttribLocation(m_program, 2, "normal");
     
+    //GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
+    
     glLinkProgram(m_program);
     CheckShaderError(m_program, GL_LINK_STATUS, true, "Err: Shader failed to link.");
     
