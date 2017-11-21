@@ -16,17 +16,12 @@ public:
     Framebuffer(int width, int height);
     void Bind();
     void Flush();
-    void BindTexture(Texture& tex);
     void ActivateTexture();
-    
-    inline GLuint* getTexture() { return &renderedTexture; }
-    inline GLuint* getFB() { return &m_framebuffer; }
-    inline GLuint* getDRB() { return &m_depthrenderbuffer; }
-    
+
     virtual ~Framebuffer();
     
 private:
-    GLuint renderedTexture;
+    GLuint m_renderedTexture;
     GLuint m_framebuffer;
     GLuint m_depthrenderbuffer;
     

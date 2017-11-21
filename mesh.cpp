@@ -23,6 +23,7 @@ Mesh::Mesh(const std::string& fileName)
     InitMesh(model);
 }
 
+//Ensure shader matches pos, tex, normals. Probably don't use this...
 Mesh::Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices)
 {
     IndexedModel model;
@@ -40,8 +41,6 @@ Mesh::Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, un
     }
     
     InitMesh(m_model);
-    
-    
     
 }
 

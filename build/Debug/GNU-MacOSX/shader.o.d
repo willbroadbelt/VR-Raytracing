@@ -126,7 +126,8 @@ build/Debug/GNU-MacOSX/shader.o: shader.cpp \
   /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/../gtc/../gtc/constants.hpp \
   /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/../gtc/constants.inl \
   /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/../gtc/matrix_transform.inl \
-  /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/transform.inl camera.h
+  /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/transform.inl camera.h \
+  shaderloader.h
 
 /usr/local/Cellar/glew/2.1.0/include/GL/glew.h:
 
@@ -389,3 +390,5 @@ transform.h:
 /usr/local/Cellar/glm/0.9.8.5/include/glm/gtx/transform.inl:
 
 camera.h:
+
+shaderloader.h:

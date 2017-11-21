@@ -35,12 +35,14 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/canvas.o \
 	${OBJECTDIR}/display.o \
 	${OBJECTDIR}/framebuffer.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/mesh.o \
 	${OBJECTDIR}/obj_loader.o \
 	${OBJECTDIR}/shader.o \
+	${OBJECTDIR}/shaderloader.o \
 	${OBJECTDIR}/stb_image.o \
 	${OBJECTDIR}/texture.o \
 	${OBJECTDIR}/transform.o
@@ -69,6 +71,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/vr_raytracing: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/vr_raytracing ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/canvas.o: canvas.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/canvas.o canvas.cpp
 
 ${OBJECTDIR}/display.o: display.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -99,6 +106,11 @@ ${OBJECTDIR}/shader.o: shader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/shader.o shader.cpp
+
+${OBJECTDIR}/shaderloader.o: shaderloader.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/shaderloader.o shaderloader.cpp
 
 ${OBJECTDIR}/stb_image.o: stb_image.c
 	${MKDIR} -p ${OBJECTDIR}
