@@ -8,6 +8,7 @@
  */
 
 #include <vector>
+#include <iostream>
 
 #include "canvas.h"
 #include "shaderloader.h"
@@ -30,8 +31,10 @@ void Canvas::InitQuad() {
 
     // Create and compile our GLSL program from the shaders
     m_quad_programID = glCreateProgram();
-    GLuint quadVertexShader = CreateShader(LoadShader("./Resources/quadRender.vert"), GL_VERTEX_SHADER);
-    GLuint quadFragmentShader = CreateShader(LoadShader("./Resources/quadRender.frag"), GL_FRAGMENT_SHADER);
+    //GLuint quadVertexShader = CreateShader(LoadShader("./Resources/quadRender.vert"), GL_VERTEX_SHADER);
+    //GLuint quadFragmentShader = CreateShader(LoadShader("./Resources/quadRender.frag"), GL_FRAGMENT_SHADER);
+    GLuint quadVertexShader = CreateShader(LoadShader("./Resources/passthrough.vert"), GL_VERTEX_SHADER);
+    GLuint quadFragmentShader = CreateShader(LoadShader("./Resources/sdf_ray.frag"), GL_FRAGMENT_SHADER);
 
     glAttachShader(m_quad_programID, quadVertexShader);
     glAttachShader(m_quad_programID, quadFragmentShader);
@@ -57,9 +60,11 @@ void Canvas::InitQuad() {
     glDeleteShader(quadVertexShader);
     glDeleteShader(quadFragmentShader);
 
-    m_texID = glGetUniformLocation(m_quad_programID, "renderedTexture");
-    m_timeID = glGetUniformLocation(m_quad_programID, "time");
-
+    //m_texID = glGetUniformLocation(m_quad_programID, "tex");
+    //m_timeID = glGetUniformLocation(m_quad_programID, "time");
+    this->UniformHandles();
+    
+    glGenVertexArrays(1, &m_vertexArrayObject);
 }
 
 void Canvas::DrawCanvas() {
@@ -78,21 +83,22 @@ void Canvas::DrawCanvas() {
     m_fbo.ActivateTexture();
 
     // Set our "renderedTexture" sampler to use Texture Unit 0
-    glUniform1i(m_texID, 0);
-
-    glUniform1f(m_timeID, 1);
+    //glUniform1i(m_texID, 0);
+    //glUniform1f(m_timeID, 1);
+    this->UpdateUniforms();
 
     // 1st attribute buffer : vertices
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_quad_vertexbuffer);
     glVertexAttribPointer(
-            0, // attribute 0. No particular reason for 0, but must match the layout in the shader.
+            0, // attribute 0. Must match the layout in the shader.
             3, // size
             GL_FLOAT, // type
             GL_FALSE, // normalized?
             0, // stride
             (void*) 0 // array buffer offset
             );
+    glBindVertexArray(m_vertexArrayObject);
     // Draw the triangles !
     glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
 
@@ -113,4 +119,28 @@ void Canvas::PreRender() {
 
 bool Canvas::IsClosed() {
     return m_display.IsClosed();
+}
+
+void Canvas::UniformHandles() {
+    //m_texID = glGetUniformLocation(m_quad_programID, "tex");
+    m_timeID = glGetUniformLocation(m_quad_programID, "currentTime");
+    m_resolution = glGetUniformLocation(m_quad_programID, "resolution");
+    m_camPos = glGetUniformLocation(m_quad_programID, "camPos");
+    m_camDir = glGetUniformLocation(m_quad_programID, "camDir");
+    m_camUp = glGetUniformLocation(m_quad_programID, "camUp");
+    m_showstepdepth = glGetUniformLocation(m_quad_programID, "showStepDepth");
+}
+
+void Canvas::UpdateUniforms() {
+    //glUniform1i(m_texID, 0);
+    glUniform1f(m_timeID, 1);
+    glUniform2f(m_resolution, (GLfloat)m_display.GetWidth(), (GLfloat)m_display.GetHeight());
+    glm::vec3 pos = m_camera.GetPosition();
+    glm::vec3 dir = m_camera.GetDir();
+    glm::vec3 up = m_camera.GetUp();
+    glUniform3f(m_camPos, (GLfloat)pos.x, (GLfloat)pos.y , (GLfloat)pos.z);
+    glUniform3f(m_camDir, (GLfloat)dir.x, (GLfloat)dir.y, (GLfloat)dir.z);
+    glUniform3f(m_camUp, (GLfloat)up.x, (GLfloat)up.y, (GLfloat)up.z);
+    glUniform1i(m_showstepdepth, (GLuint)0);// 1/0 - T/F
+    
 }

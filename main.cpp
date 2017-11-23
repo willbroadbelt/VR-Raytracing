@@ -25,17 +25,22 @@ const int WINDOW_HEIGHT = 600;
 int main(int argc, char** argv) {
     
     Canvas canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
+    /*
     Mesh monkey("./Resources/monkey3.obj");
     Texture texture("./Resources/BrickTex.jpg");
     Shader shader("./Resources/basicShader");
-    Camera camera(glm::vec3(0,0,-5), 70.0f, (float)(WINDOW_WIDTH/WINDOW_HEIGHT), 0.01f, 1000.0f);    
-    
-    
+    Camera camera(glm::vec3(0,0,-5), 70.0f, (float)(WINDOW_WIDTH/WINDOW_HEIGHT), 0.01f, 1000.0f); 
+     
     Transform transform, transform2;
     float counter = 0.0f;
+    */
     
     while(!canvas.IsClosed())
     {
+        canvas.PreRender();
+        canvas.DrawCanvas();
+        
+        /*
         //Random transformations for testing.
         float sin = sinf(counter);
         float cos = cosf(counter);
@@ -56,11 +61,11 @@ int main(int argc, char** argv) {
         texture.Bind(0);
         shader.Update(transform, camera);
         monkey.Draw();
+        counter += 0.01f;
         
         //Draw canvas FBO to screen
         canvas.DrawCanvas();
- 
-        counter += 0.01f;
+        */
     }
     
     return 0;
