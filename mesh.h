@@ -49,8 +49,6 @@ public:
     
 private:
     
-    
-    
     enum
     {
         POSITION_VB,
@@ -66,9 +64,7 @@ private:
     GLuint m_vertexArrayBuffer[NUM_BUFFERS];
     
     unsigned int m_drawCount;
-    
-    IndexedModel m_model;
-    
+        
 };
 
 #endif /* MESH_H */

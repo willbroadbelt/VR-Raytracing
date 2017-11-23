@@ -97,9 +97,20 @@ void Canvas::DrawCanvas() {
     glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
 
     glDisableVertexAttribArray(0);
+    
+    m_display.Update();
 }
 
 //Use prior to anything to be rendered to texture.
 void Canvas::FBOBind() {
     m_fbo.Bind();
+}
+
+void Canvas::PreRender() {
+    this->FBOBind();
+    m_display.Clear(0.1f, 0.4f, 0.2f, 0.1f);
+}
+
+bool Canvas::IsClosed() {
+    return m_display.IsClosed();
 }

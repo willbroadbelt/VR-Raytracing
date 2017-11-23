@@ -4,15 +4,25 @@
         <activeConfTypeElem>1</activeConfTypeElem>
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>canvas.cpp</url>
+            <bookmark id="1">
+                <name/>
+                <line>13</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/framebuffer.h</file>
+            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/canvas.cpp</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/display.cpp</file>
-            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/Resources/quadRender.fragmentshader</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/main.cpp</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/mesh.cpp</file>
+            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/canvas.h</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/shader.cpp</file>
-            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/texture.cpp</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/framebuffer.cpp</file>
         </group>
     </open-files>

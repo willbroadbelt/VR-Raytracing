@@ -45,7 +45,8 @@ build/Debug/GNU-MacOSX/canvas.o: canvas.cpp \
   /Library/Frameworks/SDL2.framework/Headers/SDL_system.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_timer.h \
   /Library/Frameworks/SDL2.framework/Headers/SDL_version.h canvas.h \
-  framebuffer.h texture.h shaderloader.h
+  framebuffer.h texture.h display.h \
+  /usr/local/Cellar/sdl2/2.0.7/include/SDL2/SDL.h shaderloader.h
 
 /usr/local/Cellar/glew/2.1.0/include/GL/glew.h:
 
@@ -144,5 +145,9 @@ canvas.h:
 framebuffer.h:
 
 texture.h:
+
+display.h:
+
+/usr/local/Cellar/sdl2/2.0.7/include/SDL2/SDL.h:
 
 shaderloader.h:

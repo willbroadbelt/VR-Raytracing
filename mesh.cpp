@@ -30,17 +30,17 @@ Mesh::Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, un
     
     for(unsigned int i = 0; i < numVertices; i++)
     {
-        m_model.positions.push_back(*vertices[i].getPos());
-        m_model.texCoords.push_back(*vertices[i].getTexCoord());
-        m_model.normals.push_back(*vertices[i].getNormal());
+        model.positions.push_back(*vertices[i].getPos());
+        model.texCoords.push_back(*vertices[i].getTexCoord());
+        model.normals.push_back(*vertices[i].getNormal());
     }  
     
     for(unsigned int i = 0; i < numIndices; i++)
     {
-        m_model.indices.push_back(indices[i]);
+        model.indices.push_back(indices[i]);
     }
     
-    InitMesh(m_model);
+    InitMesh(model);
     
 }
 
