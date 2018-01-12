@@ -2,9 +2,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <time.h>
 #include <GL/glew.h>
 #include <SDL.h>
 #include <glm.hpp>
+#include <openvr.h>
 
 #include "display.h"
 #include "shader.h"
@@ -23,49 +25,33 @@ const int WINDOW_HEIGHT = 600;
 
 
 int main(int argc, char** argv) {
-    
     Canvas canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
-    /*
-    Mesh monkey("./Resources/monkey3.obj");
-    Texture texture("./Resources/BrickTex.jpg");
-    Shader shader("./Resources/basicShader");
-    Camera camera(glm::vec3(0,0,-5), 70.0f, (float)(WINDOW_WIDTH/WINDOW_HEIGHT), 0.01f, 1000.0f); 
-     
-    Transform transform, transform2;
-    float counter = 0.0f;
-    */
+    
+    float counter = 0.0f,sin, cos;
+    
+    clock_t t;
     
     while(!canvas.IsClosed())
     {
+        t  = clock();
+        
+        sin = sinf(counter);
+        cos = cosf(counter);
+        
+        //NB: Check if event occurred and only update screen if it has.
+        canvas.UpdateCamera(glm::vec3(0,0,8*cos),glm::vec3(sin,0,cos));
         canvas.PreRender();
         canvas.DrawCanvas();
         
-        /*
-        //Random transformations for testing.
-        float sin = sinf(counter);
-        float cos = cosf(counter);
+        //Frame rate
+        if(clock()-t > 0){
+            t = clock() - t;
+            printf("Frame rate = %f.\n",CLOCKS_PER_SEC/(float)(t));
+            t = clock();
+        }
         
-        transform.GetPos().z = cos;
-        transform.GetRot().x = counter;
-        transform.GetRot().y = counter*1.5;
-        transform.GetRot().z = counter;
-        
-        transform2.GetRot().x = counter;
-        
-        
-        //Use FBO with full-screen quad
-        canvas.PreRender();
-        
-        //Set up and draw monkey mesh to the canvas FBO
-        shader.Bind();
-        texture.Bind(0);
-        shader.Update(transform, camera);
-        monkey.Draw();
-        counter += 0.01f;
-        
-        //Draw canvas FBO to screen
-        canvas.DrawCanvas();
-        */
+        counter+=0.02f;
+ 
     }
     
     return 0;

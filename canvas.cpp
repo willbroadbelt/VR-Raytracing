@@ -24,6 +24,9 @@ void Canvas::InitQuad() {
         1.0f, -1.0f, 0.0f,
         1.0f, 1.0f, 0.0f,
     };
+    
+    glGenVertexArrays(1, &m_vertexArrayObject);
+    glBindVertexArray(m_vertexArrayObject);
 
     glGenBuffers(1, &m_quad_vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_quad_vertexbuffer);
@@ -31,8 +34,6 @@ void Canvas::InitQuad() {
 
     // Create and compile our GLSL program from the shaders
     m_quad_programID = glCreateProgram();
-    //GLuint quadVertexShader = CreateShader(LoadShader("./Resources/quadRender.vert"), GL_VERTEX_SHADER);
-    //GLuint quadFragmentShader = CreateShader(LoadShader("./Resources/quadRender.frag"), GL_FRAGMENT_SHADER);
     GLuint quadVertexShader = CreateShader(LoadShader("./Resources/passthrough.vert"), GL_VERTEX_SHADER);
     GLuint quadFragmentShader = CreateShader(LoadShader("./Resources/sdf_ray.frag"), GL_FRAGMENT_SHADER);
 
@@ -64,7 +65,7 @@ void Canvas::InitQuad() {
     //m_timeID = glGetUniformLocation(m_quad_programID, "time");
     this->UniformHandles();
     
-    glGenVertexArrays(1, &m_vertexArrayObject);
+    glBindVertexArray(0);
 }
 
 void Canvas::DrawCanvas() {
@@ -76,6 +77,7 @@ void Canvas::DrawCanvas() {
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glBindVertexArray(m_vertexArrayObject);
     // Use our shader
     glUseProgram(m_quad_programID);
 
@@ -98,13 +100,14 @@ void Canvas::DrawCanvas() {
             0, // stride
             (void*) 0 // array buffer offset
             );
-    glBindVertexArray(m_vertexArrayObject);
+    
     // Draw the triangles !
     glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
 
     glDisableVertexAttribArray(0);
-    
+
     m_display.Update();
+    glBindVertexArray(0);
 }
 
 //Use prior to anything to be rendered to texture.
@@ -135,7 +138,7 @@ void Canvas::UpdateUniforms() {
     //glUniform1i(m_texID, 0);
     glUniform1f(m_timeID, 1);
     glUniform2f(m_resolution, (GLfloat)m_display.GetWidth(), (GLfloat)m_display.GetHeight());
-    glm::vec3 pos = m_camera.GetPosition();
+    glm::vec3 pos = m_camera.GetPos();
     glm::vec3 dir = m_camera.GetDir();
     glm::vec3 up = m_camera.GetUp();
     glUniform3f(m_camPos, (GLfloat)pos.x, (GLfloat)pos.y , (GLfloat)pos.z);
@@ -143,4 +146,9 @@ void Canvas::UpdateUniforms() {
     glUniform3f(m_camUp, (GLfloat)up.x, (GLfloat)up.y, (GLfloat)up.z);
     glUniform1i(m_showstepdepth, (GLuint)0);// 1/0 - T/F
     
+}
+
+void Canvas::UpdateCamera(const glm::vec3& pos, const glm::vec3& dir) {
+    m_camera.UpdatePos(pos);
+    m_camera.UpdateDir(dir);
 }

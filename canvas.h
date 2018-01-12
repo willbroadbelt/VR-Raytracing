@@ -17,16 +17,18 @@ class Canvas
 public:
     Canvas(int width, int height, const std::string& title = "Window") : 
         m_fbo(width, height), m_display(width, height, title),
-        m_camera(glm::vec3(0.0f,0.0f,8.0f), 70.0f, (float)(width/height), 0.01f, 1000.0f) { InitQuad(); };
+        m_camera(glm::vec3(0.0f,10.0f,8.0f), glm::vec3(0,0,-1)) { InitQuad(); };
     void FBOBind();
     void DrawCanvas();
     void PreRender();
     bool IsClosed();
+    void UpdateCamera(const glm::vec3& pos, const glm::vec3& dir);
     
 private:
     void InitQuad();
     void UpdateUniforms();
     void UniformHandles();
+    
     
     Display m_display;
     Framebuffer m_fbo;

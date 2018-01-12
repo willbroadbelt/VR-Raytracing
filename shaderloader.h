@@ -8,6 +8,7 @@
 #ifndef SHADERLOADER_H
 #define SHADERLOADER_H
 
+#include <GL/glew.h>
 #include <string>
 
 void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);

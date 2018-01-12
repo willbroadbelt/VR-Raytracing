@@ -52,10 +52,10 @@ void Shader::Bind()
 {
     glUseProgram(m_program);
 }
-
+//Depreciated...
 void Shader::Update(const Transform& transform, const Camera& camera)
 {
-    glm::mat4 MVP = camera.getViewProjection() * transform.GetModel();
+    //glm::mat4 MVP = camera.getViewProjection() * transform.GetModel();
     //Transpose false
-    glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &MVP[0][0]);
+    //glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &MVP[0][0]);
 }

@@ -14,32 +14,34 @@
 class Camera
 {
 public:
-    Camera(const glm::vec3& pos, float fov, float aspect, float zNear, float zFar)
+    Camera(const glm::vec3& pos, const glm::vec3& dir)
     {
-        m_perspective = glm::perspective(fov, aspect, zNear, zFar);
         m_position = pos;
-        m_forward = glm::vec3(-0.0f,-0.0f,-1.0f);
-        m_up = glm::vec3(0.0f,1.0f,0.0f);
+        m_direction = dir;
     }
+
+    glm::vec3 GetPos();
+    glm::vec3 GetUp();
+    glm::vec3 GetDir();
     
+    void UpdatePos(const glm::vec3& pos);
+    void UpdateDir(const glm::vec3& dir);
+    
+    
+private:
+    glm::vec3 m_position;
+    glm::vec3 m_direction;
+    
+};
+
+    /*
+     * //Example of lookAt to get a ViewProjection.
     inline glm::mat4 getViewProjection() const
     {
         return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
         
     }
-    inline glm::vec3 GetPosition() { return m_position; }
-    inline glm::vec3 GetUp() { return m_up; }
-    inline glm::vec3 GetDir() { return m_forward; }
-    
-    
-private:
-    glm::mat4 m_perspective;
-    glm::vec3 m_position;
-    glm::vec3 m_forward;
-    glm::vec3 m_up;
-    
-    
-};
+     */
 
 #endif /* CAMERA_H */
 

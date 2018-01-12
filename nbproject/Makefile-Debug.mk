@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/camera.o \
 	${OBJECTDIR}/canvas.o \
 	${OBJECTDIR}/display.o \
 	${OBJECTDIR}/framebuffer.o \
@@ -45,7 +46,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/shaderloader.o \
 	${OBJECTDIR}/stb_image.o \
 	${OBJECTDIR}/texture.o \
-	${OBJECTDIR}/transform.o
+	${OBJECTDIR}/transform.o \
+	${OBJECTDIR}/vrsystem.o
 
 
 # C Compiler Flags
@@ -75,6 +77,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/vr_raytracing: /Library/Frameworks/SD
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/vr_raytracing: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/vr_raytracing ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/camera.o: camera.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/Cellar/sdl2/2.0.7/include/SDL2 -I/usr/local/Cellar/glew/2.1.0/include -I/usr/local/Cellar/glm/0.9.8.5/include/glm -include /usr/local/Cellar/glew/2.1.0/include/GL/glew.h -include /Library/Frameworks/SDL2.framework/Headers/SDL.h -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/camera.o camera.cpp
 
 ${OBJECTDIR}/canvas.o: canvas.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -130,6 +137,11 @@ ${OBJECTDIR}/transform.o: transform.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/Cellar/sdl2/2.0.7/include/SDL2 -I/usr/local/Cellar/glew/2.1.0/include -I/usr/local/Cellar/glm/0.9.8.5/include/glm -include /usr/local/Cellar/glew/2.1.0/include/GL/glew.h -include /Library/Frameworks/SDL2.framework/Headers/SDL.h -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/transform.o transform.cpp
+
+${OBJECTDIR}/vrsystem.o: vrsystem.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/Cellar/sdl2/2.0.7/include/SDL2 -I/usr/local/Cellar/glew/2.1.0/include -I/usr/local/Cellar/glm/0.9.8.5/include/glm -include /usr/local/Cellar/glew/2.1.0/include/GL/glew.h -include /Library/Frameworks/SDL2.framework/Headers/SDL.h -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/vrsystem.o vrsystem.cpp
 
 # Subprojects
 .build-subprojects:

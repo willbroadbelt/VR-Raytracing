@@ -138,7 +138,7 @@ if(pt.y<-1){
 
 float shade(vec3 eye, vec3 pt, vec3 n) {
   float val = 0;
-  float ambCo = 0.1;//Supposed to be 0.1 but is quite dark.
+  float ambCo = 0.4;//Supposed to be 0.1 but is quite dark.
   float diffCo = 1;
   float specCo  = 1;
   float specShin = 256;
