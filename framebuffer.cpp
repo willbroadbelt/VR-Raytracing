@@ -48,16 +48,21 @@ Framebuffer::Framebuffer(int width, int height)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Framebuffer::Bind()
+void Framebuffer::Bind(bool left)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
-    glViewport(0, 0, m_width, m_height);
+    if(left){
+        glViewport(0, 0, m_width, m_height);
+    }else{
+        glViewport(m_width, 0, m_width, m_height);
+    }
+    
 }
 
 void Framebuffer::Flush()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(0, 0, m_width, m_height);
+    //glViewport(0, 0, m_width, m_height);
 }
 
 Framebuffer::~Framebuffer()

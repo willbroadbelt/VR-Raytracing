@@ -14,7 +14,7 @@ class Framebuffer
 {
 public:
     Framebuffer(int width, int height);
-    void Bind();
+    void Bind(bool left);
     void Flush();
     void ActivateTexture();
 

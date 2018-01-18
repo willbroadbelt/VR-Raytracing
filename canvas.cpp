@@ -15,15 +15,33 @@
 
 
 void Canvas::InitQuad() {
-
+    
     static const GLfloat g_quad_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f, 1.0f,
+        -1.0f, 1.0f,
+        1.0f, -1.0f,
+        1.0f, 1.0f
     };
+    
+    /*
+    static const GLfloat g_quad_vertex_buffer_data[] = {
+        -1.0f, -1.0f,
+        0.0f, -1.0f,
+        0.0f, 1.0f,
+        -1.0f, -1.0f,
+        0.0f, 1.0f,
+        -1.0f, 1.0f,
+        
+        0.0f, -1.0f,
+        1.0f, -1.0f,
+        1.0f, 1.0f,
+        0.0f, -1.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    };
+    */
     
     glGenVertexArrays(1, &m_vertexArrayObject);
     glBindVertexArray(m_vertexArrayObject);
@@ -61,8 +79,6 @@ void Canvas::InitQuad() {
     glDeleteShader(quadVertexShader);
     glDeleteShader(quadFragmentShader);
 
-    //m_texID = glGetUniformLocation(m_quad_programID, "tex");
-    //m_timeID = glGetUniformLocation(m_quad_programID, "time");
     this->UniformHandles();
     
     glBindVertexArray(0);
@@ -70,8 +86,12 @@ void Canvas::InitQuad() {
 
 void Canvas::DrawCanvas() {
     
+    //Left eye:
+    m_fbo_left.Bind(true);
+    m_display.Clear(0.3f, 0.3f, 0.6f, 0.5f);
+    
     // Render to the screen
-    m_fbo.Flush();
+    m_fbo_left.Flush();
     glDisable(GL_DEPTH);
 
     // Clear the screen
@@ -82,19 +102,16 @@ void Canvas::DrawCanvas() {
     glUseProgram(m_quad_programID);
 
     // Bind our texture in Texture Unit 0
-    m_fbo.ActivateTexture();
-
-    // Set our "renderedTexture" sampler to use Texture Unit 0
-    //glUniform1i(m_texID, 0);
-    //glUniform1f(m_timeID, 1);
-    this->UpdateUniforms();
+    m_fbo_left.ActivateTexture();
+    
+    this->UpdateUniforms(true);
 
     // 1st attribute buffer : vertices
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_quad_vertexbuffer);
     glVertexAttribPointer(
             0, // attribute 0. Must match the layout in the shader.
-            3, // size
+            2, // size
             GL_FLOAT, // type
             GL_FALSE, // normalized?
             0, // stride
@@ -106,18 +123,44 @@ void Canvas::DrawCanvas() {
 
     glDisableVertexAttribArray(0);
 
+    glBindVertexArray(0);
+    
+    //Right Eye:
+    m_fbo_right.Bind(false);
+    m_display.Clear(0.3f, 0.3f, 0.6f, 0.5f);
+    
+    // Render to the screen
+    m_fbo_right.Flush();
+    glDisable(GL_DEPTH);
+
+    glBindVertexArray(m_vertexArrayObject);
+    
+    glUseProgram(m_quad_programID);
+
+    // Bind our texture in Texture Unit 0
+    m_fbo_right.ActivateTexture();
+    
+    this->UpdateUniforms(false);
+
+    //Right eye vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_quad_vertexbuffer);
+    glVertexAttribPointer(
+            0, // attribute 0. Must match the layout in the shader.
+            2, // size
+            GL_FLOAT, // type
+            GL_FALSE, // normalized?
+            0, // stride
+            (void*) 0 // array buffer offset
+            );
+    
+    // Draw the triangles 
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDisableVertexAttribArray(0);
+
     m_display.Update();
     glBindVertexArray(0);
-}
-
-//Use prior to anything to be rendered to texture.
-void Canvas::FBOBind() {
-    m_fbo.Bind();
-}
-
-void Canvas::PreRender() {
-    this->FBOBind();
-    m_display.Clear(0.1f, 0.4f, 0.2f, 0.1f);
 }
 
 bool Canvas::IsClosed() {
@@ -134,21 +177,32 @@ void Canvas::UniformHandles() {
     m_showstepdepth = glGetUniformLocation(m_quad_programID, "showStepDepth");
 }
 
-void Canvas::UpdateUniforms() {
-    //glUniform1i(m_texID, 0);
+void Canvas::UpdateUniforms(bool leftEye) {
     glUniform1f(m_timeID, 1);
     glUniform2f(m_resolution, (GLfloat)m_display.GetWidth(), (GLfloat)m_display.GetHeight());
-    glm::vec3 pos = m_camera.GetPos();
-    glm::vec3 dir = m_camera.GetDir();
-    glm::vec3 up = m_camera.GetUp();
-    glUniform3f(m_camPos, (GLfloat)pos.x, (GLfloat)pos.y , (GLfloat)pos.z);
-    glUniform3f(m_camDir, (GLfloat)dir.x, (GLfloat)dir.y, (GLfloat)dir.z);
-    glUniform3f(m_camUp, (GLfloat)up.x, (GLfloat)up.y, (GLfloat)up.z);
     glUniform1i(m_showstepdepth, (GLuint)0);// 1/0 - T/F
+    glm::vec3 pos, dir, up;
+    if(leftEye){
+        pos = m_camera_left.GetPos();
+        dir = m_camera_left.GetDir();
+        up = m_camera_left.GetUp();
+        glUniform3f(m_camPos, (GLfloat)pos.x, (GLfloat)pos.y , (GLfloat)pos.z);
+        glUniform3f(m_camDir, (GLfloat)dir.x, (GLfloat)dir.y, (GLfloat)dir.z);
+        glUniform3f(m_camUp, (GLfloat)up.x, (GLfloat)up.y, (GLfloat)up.z);
+    }else{
+        pos = m_camera_right.GetPos();
+        dir = m_camera_right.GetDir();
+        up = m_camera_right.GetUp();
+        glUniform3f(m_camPos, (GLfloat)pos.x, (GLfloat)pos.y , (GLfloat)pos.z);
+        glUniform3f(m_camDir, (GLfloat)dir.x, (GLfloat)dir.y, (GLfloat)dir.z);
+        glUniform3f(m_camUp, (GLfloat)up.x, (GLfloat)up.y, (GLfloat)up.z);
+    }
     
 }
 
 void Canvas::UpdateCamera(const glm::vec3& pos, const glm::vec3& dir) {
-    m_camera.UpdatePos(pos);
-    m_camera.UpdateDir(dir);
+    m_camera_left.UpdatePos(pos);
+    m_camera_left.UpdateDir(dir);
+    m_camera_right.UpdatePos(pos);
+    m_camera_right.UpdateDir(dir);
 }

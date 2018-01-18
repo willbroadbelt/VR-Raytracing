@@ -20,7 +20,7 @@
 
 using namespace std;
 
-const int WINDOW_WIDTH = 800;
+const int WINDOW_WIDTH = 600;
 const int WINDOW_HEIGHT = 600;
 
 
@@ -39,14 +39,13 @@ int main(int argc, char** argv) {
         cos = cosf(counter);
         
         //NB: Check if event occurred and only update screen if it has.
-        canvas.UpdateCamera(glm::vec3(0,0,8*cos),glm::vec3(sin,0,cos));
-        canvas.PreRender();
+        canvas.UpdateCamera(glm::vec3(0,0,8),glm::vec3(sin,0,cos));
         canvas.DrawCanvas();
         
         //Frame rate
         if(clock()-t > 0){
             t = clock() - t;
-            printf("Frame rate = %f.\n",CLOCKS_PER_SEC/(float)(t));
+            printf("Frame rate = %f. Or %d ticks.\n",CLOCKS_PER_SEC/((float)(t)),t);
             t = clock();
         }
         
