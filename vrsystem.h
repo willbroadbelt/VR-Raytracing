@@ -17,6 +17,8 @@ class VRsystem {
 public:
     VRsystem();
     ~VRsystem();
+  
+    bool InitVR();
 
 
 private:
@@ -27,7 +29,17 @@ private:
     std::string m_strDisplay;
     vr::TrackedDevicePose_t m_rTrackedDevicePose[ vr::k_unMaxTrackedDeviceCount ];
     
+    Matrix4 m_mat4HMDPose;
+    Matrix4 m_mat4eyePosLeft;
+    Matrix4 m_mat4eyePosRight;
 
+    Matrix4 m_mat4ProjectionCenter;
+    Matrix4 m_mat4ProjectionLeft;
+    Matrix4 m_mat4ProjectionRight;
+ * 
+ *  Matrix4 GetCurrentViewProjectionMatrix(vr::Hmd_Eye nEye);
+ *  Matrix4 GetHMDMatrixProjectionEye(vr::Hmd_Eye nEye);
+ *  Matrix4 GetHMDMatrixPoseEye(vr::Hmd_Eye nEye);
 };
 */
 #endif /* VRSYSTEM_H */
