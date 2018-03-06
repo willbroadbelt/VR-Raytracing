@@ -38,7 +38,7 @@ vec3 getBackground(vec3 dir) {
 
 vec3 getRayDir() {
   vec3 xAxis = normalize(cross(camDir, camUp));
-  return normalize(pos.x * (resolution.x / resolution.y) * xAxis + pos.y * camUp + 5 * camDir);
+  return normalize(pos.x * (resolution.x / resolution.y) * xAxis + pos.y * camUp + 2 * camDir);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -108,15 +108,12 @@ float TorusScene(vec3 pt){
 	return fScene;
 }
 
-float sceneWithPlane(vec3 pt,float scene){
+float sceneWithPlane(vec3 pt){
 	float plane = sdPlane(pt-vec3(0,-1,0), vec4(0,1,0,1));
+        float scene = CubesAndSpheres(pt);
   	return min(scene, plane);
 }
-
-
-vec3 getNormal(vec3 pt) {
-  return normalize(GRADIENT(pt, sphere));
-}
+///////////////////////////////////////////////////
 
 vec3 getColor(vec3 pt) {
 if(pt.y<-1){
@@ -129,7 +126,7 @@ if(pt.y<-1){
 		return mix(vec3(0.4,1,0.4),vec3(0.4,0.4,1), split);
 	}
 }else{
-  return vec3(1);
+  return vec3(0.8,0.8,0.8);
 }
 
 }
@@ -137,33 +134,50 @@ if(pt.y<-1){
 ///////////////////////////////////////////////////////////////////////////////
 
 float shade(vec3 eye, vec3 pt, vec3 n) {
-  float val = 0;
-  float ambCo = 0.4;//Supposed to be 0.1 but is quite dark.
+  float diffuse = 0;
+  float specular = 0;
+  float ambient = 0.1;//Supposed to be 0.1 but is quite dark.
   float diffCo = 1;
-  float specCo  = 1;
+  float specCo  = 0.4;
   float specShin = 256;
   
   vec3 e = normalize(pt-eye);
   
-  val += ambCo;  // Ambient
-  
   
   for (int i = 0; i < LIGHT_POS.length(); i++) {
     vec3 l = normalize(LIGHT_POS[i] - pt); 
-    float nDotL = clamp(0,dot(n, l), 1);
-    vec3 r = (reflect(l,n));
+    float nDotL = clamp(dot(n, l),0.0, 1.0);
+    vec3 r = (reflect(-l,n));
     
-    val += diffCo * nDotL;
-    val += specCo * pow(clamp(0, dot(e,r), 1),specShin);
+    diffuse += diffCo * nDotL;
+    specular += specCo * pow(clamp(0, dot(e,r), 1),specShin);
   }
-  return val;
+  return ambient + diffuse + specular;
+}
+
+float getShadow(vec3 pt) {
+  vec3 lightDir = normalize(LIGHT_POS[0] - pt);
+  float kd = 1;
+  int step = 0;
+
+  for (float t = 0.1; t < length(LIGHT_POS[0] - pt) && step < RENDER_DEPTH && kd > 0.001; ) {
+    float d = CubesAndSpheres(pt + t * lightDir);
+    if (d < 0.001) {
+      kd = 0;
+    } else {
+      kd = min(kd, 16 * d / t);
+    }
+    t += d;
+    step++;
+  }
+  return kd;
 }
 
 vec3 illuminate(vec3 camPos, vec3 rayDir, vec3 pt) {
   vec3 c, n;
-  n = getNormal(pt);
+  n = normalize(GRADIENT(pt, sceneWithPlane));
   c = getColor(pt);
-  return shade(camPos, pt, n) * c;
+  return shade(camPos, pt, n) * c * (0.1 + getShadow(pt));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -179,8 +193,7 @@ vec3 raymarch(vec3 camPos, vec3 rayDir) {
 
   for (float d = 1000; step < RENDER_DEPTH && abs(d) > CLOSE_ENOUGH; t += abs(d)) {
    // d = cube(camPos + t * rayDir);
-   d = sceneWithPlane(camPos + t * rayDir,CubesAndSpheres(camPos + t * rayDir));
-   //d = sceneWithPlane(camPos + t * rayDir,TorusScene(camPos + t * rayDir));
+    d = sceneWithPlane(camPos + t * rayDir);
     step++;
   }
 

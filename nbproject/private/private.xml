@@ -18,12 +18,10 @@
         <group>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/camera.h</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/vrsystem.cpp</file>
-            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/framebuffer.h</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/canvas.cpp</file>
-            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/display.cpp</file>
+            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/vrsystem.h</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/main.cpp</file>
             <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/canvas.h</file>
-            <file>file:/Users/willbroadbelt/Desktop/Part%20II%20Project/Code/VR%20Raytracing/framebuffer.cpp</file>
         </group>
     </open-files>
 </project-private>
