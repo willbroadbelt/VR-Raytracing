@@ -38,8 +38,11 @@ int main(int argc, char** argv) {
         sin = sinf(counter);
         cos = cosf(counter);
         
-        //NB: Check if event occurred and only update screen if it has.
-        canvas.UpdateCamera(glm::vec3(0,0,8),glm::vec3(sin,0,cos));
+        //Top down view
+        canvas.UpdateCamera(glm::vec3(0,10,0),glm::vec3(0,-1,0.00001));
+        //Circular moving view
+        //canvas.UpdateCamera(glm::vec3(0,0,0),glm::vec3(cos,0,sin));
+        
         canvas.DrawCanvas();
         
         //Frame rate
