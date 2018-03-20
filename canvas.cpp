@@ -9,6 +9,8 @@
 
 #include <vector>
 #include <iostream>
+#include <chrono>
+#include <ctime>
 
 #include "canvas.h"
 #include "shaderloader.h"
@@ -86,6 +88,7 @@ void Canvas::InitQuad() {
 
 void Canvas::DrawCanvas() {
     
+    auto start = std::chrono::system_clock::now();
     //Left eye:
     m_fbo_left.Bind(true);
     m_display.Clear(0.3f, 0.3f, 0.6f, 0.5f);
@@ -161,6 +164,12 @@ void Canvas::DrawCanvas() {
 
     m_display.Update();
     glBindVertexArray(0);
+    glFlush();
+    glFinish();
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    printf("%f",elapsed_seconds);
+    m_file << elapsed_seconds.count()<<"\n";
 }
 
 bool Canvas::IsClosed() {

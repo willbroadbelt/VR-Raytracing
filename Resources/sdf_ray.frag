@@ -169,7 +169,7 @@ float RandomCubes(vec3 pt, int n, int scale){
 
 //Returns the scene to use (used so only have to update in one place)
 float TestScene(vec3 pt){
-    return RandomCubes(pt, 3, 6);
+    return CircleOfCubes(pt, 5, 3);
     //return CubesAndSpheres(pt);
 }
 
@@ -261,10 +261,10 @@ vec3 raymarch(vec3 camPos, vec3 rayDir) {
     d = sceneWithPlane(camPos + t * rayDir);
     step++;
   }
-
+    bool show = false;
   if (step == RENDER_DEPTH) {
     return getBackground(rayDir);
-  } else if (showStepDepth) {
+  } else if (show) {
     return vec3(float(step) / RENDER_DEPTH);
   } else {
     return illuminate(camPos, rayDir, camPos + t * rayDir);
